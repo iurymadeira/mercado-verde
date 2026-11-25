@@ -29,8 +29,7 @@ export const Route = createFileRoute("/entrar")({
 
 function AuthPage() {
   const { login, register } = useAuth();
-  const { pendingCheckout, totalItems, subtotal, completeSimulatedOrder, setPendingCheckout } =
-    useCart();
+  const { pendingCheckout, totalItems, subtotal, setPendingCheckout } = useCart();
   const navigate = useNavigate();
 
   const [mode, setMode] = useState<"login" | "register">("login");
@@ -43,13 +42,17 @@ function AuthPage() {
   const isCheckoutFlow = pendingCheckout && totalItems > 0;
 
   const finishAfterAuth = () => {
+    setPendingCheckout(false);
     if (isCheckoutFlow) {
-      completeSimulatedOrder();
-      toast.success("Conta conectada e pedido simulado confirmado!");
-    } else {
-      setPendingCheckout(false);
-      toast.success(mode === "login" ? "Login realizado com sucesso!" : "Conta criada com sucesso!");
+      toast.success(
+        mode === "login"
+          ? "Login realizado! Prossiga para o pagamento."
+          : "Conta criada! Prossiga para o pagamento.",
+      );
+      void navigate({ to: "/checkout" });
+      return;
     }
+    toast.success(mode === "login" ? "Login realizado com sucesso!" : "Conta criada com sucesso!");
     void navigate({ to: "/" });
   };
 
@@ -249,10 +252,10 @@ function AuthPage() {
           >
             {mode === "login"
               ? isCheckoutFlow
-                ? "Entrar e finalizar compra"
+                ? "Entrar e ir para pagamento"
                 : "Entrar"
               : isCheckoutFlow
-                ? "Criar conta e finalizar compra"
+                ? "Criar conta e ir para pagamento"
                 : "Criar conta"}
           </Button>
         </form>

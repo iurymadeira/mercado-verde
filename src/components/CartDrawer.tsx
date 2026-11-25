@@ -1,13 +1,11 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { CheckCircle2, Minus, Plus, ShoppingBag, Trash2, Truck } from "lucide-react";
-import { toast } from "sonner";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { formatBRL } from "@/data/products";
+import { FREE_SHIPPING_THRESHOLD } from "@/lib/checkout";
 import { useCart } from "@/lib/cart-context";
 import { useAuth } from "@/lib/auth-context";
-
-const FREE_SHIPPING_THRESHOLD = 199;
 
 export function CartDrawer() {
   const {
@@ -21,7 +19,6 @@ export function CartDrawer() {
     totalItems,
     setPendingCheckout,
     orderCompleted,
-    completeSimulatedOrder,
     resetOrderCompleted,
   } = useCart();
   const { user } = useAuth();
@@ -41,8 +38,9 @@ export function CartDrawer() {
       void navigate({ to: "/entrar" });
       return;
     }
-    completeSimulatedOrder();
-    toast.success("Pedido simulado concluído com sucesso!");
+    setPendingCheckout(false);
+    closeCart();
+    void navigate({ to: "/checkout" });
   };
 
   const remainingForFreeShipping = Math.max(0, FREE_SHIPPING_THRESHOLD - subtotal);

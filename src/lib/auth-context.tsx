@@ -16,6 +16,7 @@ interface AuthResult {
 
 interface AuthContextValue {
   user: AuthUser | null;
+  hydrated: boolean;
   login: (email: string, password: string) => AuthResult;
   register: (name: string, email: string, password: string) => AuthResult;
   logout: () => void;
@@ -144,7 +145,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = () => setUser(null);
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout }}>
+    <AuthContext.Provider value={{ user, hydrated, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );
