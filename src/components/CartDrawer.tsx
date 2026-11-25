@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { CheckCircle2, Minus, Plus, ShoppingBag, Trash2, Truck } from "lucide-react";
 import { toast } from "sonner";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { formatBRL } from "@/data/products";
 import { useCart } from "@/lib/cart-context";
+import { useAuth } from "@/lib/auth-context";
 
 const FREE_SHIPPING_THRESHOLD = 199;
 
@@ -16,23 +16,32 @@ export function CartDrawer() {
     resolvedItems,
     updateQuantity,
     removeItem,
-    clearCart,
     subtotal,
     totalSavings,
     totalItems,
+    setPendingCheckout,
+    orderCompleted,
+    completeSimulatedOrder,
+    resetOrderCompleted,
   } = useCart();
-  const [orderCompleted, setOrderCompleted] = useState(false);
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   const handleOpenChange = (open: boolean) => {
     if (!open) {
       closeCart();
-      if (orderCompleted) setOrderCompleted(false);
+      if (orderCompleted) resetOrderCompleted();
     }
   };
 
   const handleCheckout = () => {
-    setOrderCompleted(true);
-    clearCart();
+    if (!user) {
+      setPendingCheckout(true);
+      closeCart();
+      void navigate({ to: "/entrar" });
+      return;
+    }
+    completeSimulatedOrder();
     toast.success("Pedido simulado concluído com sucesso!");
   };
 
@@ -61,9 +70,12 @@ export function CartDrawer() {
             <div className="flex size-16 items-center justify-center rounded-full bg-brand-soft text-primary">
               <CheckCircle2 className="size-9" />
             </div>
-            <h3 className="mt-5 text-xl font-bold text-foreground">Compra simulada confirmada!</h3>
+            <h3 className="mt-5 text-xl font-bold text-foreground">
+              {user ? `Obrigado, ${user.name.split(" ")[0]}!` : "Compra simulada confirmada!"}
+            </h3>
             <p className="mt-2 max-w-xs text-sm text-muted-foreground">
-              Este é um protótipo acadêmico de frontend — nenhuma cobrança real foi realizada.
+              Sua compra simulada foi confirmada. Este é um protótipo acadêmico de frontend — nenhuma
+              cobrança real foi realizada.
             </p>
             <Button className="mt-6 rounded-full px-6" onClick={() => handleOpenChange(false)}>
               Continuar explorando

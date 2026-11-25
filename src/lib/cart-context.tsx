@@ -22,6 +22,11 @@ interface CartContextValue {
   searchQuery: string;
   setSearchQuery: (value: string) => void;
   cartPulseKey: number;
+  pendingCheckout: boolean;
+  setPendingCheckout: (value: boolean) => void;
+  orderCompleted: boolean;
+  completeSimulatedOrder: () => void;
+  resetOrderCompleted: () => void;
 }
 
 const STORAGE_KEY = "verde-market-cart-v1";
@@ -34,6 +39,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [cartPulseKey, setCartPulseKey] = useState(0);
+  const [pendingCheckout, setPendingCheckout] = useState(false);
+  const [orderCompleted, setOrderCompleted] = useState(false);
 
   useEffect(() => {
     try {
@@ -100,6 +107,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const clearCart = () => setItems([]);
 
+  const completeSimulatedOrder = () => {
+    setItems([]);
+    setPendingCheckout(false);
+    setOrderCompleted(true);
+    setIsOpen(true);
+  };
+
+  const resetOrderCompleted = () => setOrderCompleted(false);
+
   const resolvedItems = useMemo(() => {
     return items
       .map((item) => {
@@ -146,6 +162,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
         searchQuery,
         setSearchQuery,
         cartPulseKey,
+        pendingCheckout,
+        setPendingCheckout,
+        orderCompleted,
+        completeSimulatedOrder,
+        resetOrderCompleted,
       }}
     >
       {children}

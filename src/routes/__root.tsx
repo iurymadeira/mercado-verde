@@ -13,6 +13,7 @@ import { Toaster } from "sonner";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { AuthProvider } from "../lib/auth-context";
 import { CartProvider } from "../lib/cart-context";
 import { Navbar } from "../components/Navbar";
 import { CartDrawer } from "../components/CartDrawer";
@@ -134,22 +135,24 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <CartProvider>
-        <div className="flex min-h-screen flex-col bg-background text-foreground">
-          <Navbar />
-          <main className="flex-1">
-            <Outlet />
-          </main>
-          <footer className="mt-16 border-t border-border bg-card">
-            <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 py-6 text-xs text-muted-foreground sm:flex-row sm:px-6">
-              <p className="font-medium text-foreground">Verde Market</p>
-              <p>E-commerce fictício para projeto acadêmico — interface frontend simulada.</p>
-            </div>
-          </footer>
-          <CartDrawer />
-          <Toaster position="bottom-left" richColors />
-        </div>
-      </CartProvider>
+      <AuthProvider>
+        <CartProvider>
+          <div className="flex min-h-screen flex-col bg-background text-foreground">
+            <Navbar />
+            <main className="flex-1">
+              <Outlet />
+            </main>
+            <footer className="mt-16 border-t border-border bg-card">
+              <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 py-6 text-xs text-muted-foreground sm:flex-row sm:px-6">
+                <p className="font-medium text-foreground">Verde Market</p>
+                <p>E-commerce fictício para projeto acadêmico — interface frontend simulada.</p>
+              </div>
+            </footer>
+            <CartDrawer />
+            <Toaster position="bottom-left" richColors />
+          </div>
+        </CartProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

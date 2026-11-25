@@ -1,9 +1,12 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { Leaf, MapPin, Search, ShoppingBag, X } from "lucide-react";
+import { Leaf, LogOut, MapPin, Search, ShoppingBag, User, X } from "lucide-react";
+import { toast } from "sonner";
 import { useCart } from "@/lib/cart-context";
+import { useAuth } from "@/lib/auth-context";
 
 export function Navbar() {
   const { totalItems, openCart, searchQuery, setSearchQuery, cartPulseKey } = useCart();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
@@ -64,6 +67,35 @@ export function Navbar() {
           <MapPin className="size-3.5 text-primary" />
           <span>Enviar para São Paulo, SP</span>
         </div>
+
+        {user ? (
+          <div className="flex shrink-0 items-center gap-1.5">
+            <span className="hidden items-center gap-1.5 rounded-full bg-brand-soft/70 px-3 py-1.5 text-xs font-semibold text-brand-soft-foreground sm:inline-flex">
+              <User className="size-3.5 text-primary" />
+              {user.name.split(" ")[0]}
+            </span>
+            <button
+              type="button"
+              onClick={() => {
+                logout();
+                toast.message("Você saiu da sua conta.");
+              }}
+              aria-label="Sair da conta"
+              className="flex h-10 items-center gap-1 rounded-full border border-border bg-card px-3 text-xs font-medium text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
+            >
+              <LogOut className="size-3.5" />
+              <span className="hidden md:inline">Sair</span>
+            </button>
+          </div>
+        ) : (
+          <Link
+            to="/entrar"
+            className="flex h-10 shrink-0 items-center gap-1.5 rounded-full border border-border bg-card px-3.5 text-sm font-medium text-foreground transition-all hover:border-primary/40 hover:bg-brand-soft/60"
+          >
+            <User className="size-4 text-primary" />
+            <span className="hidden sm:inline">Entrar</span>
+          </Link>
+        )}
 
         <button
           type="button"
