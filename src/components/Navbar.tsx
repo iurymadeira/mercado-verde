@@ -68,6 +68,13 @@ export function Navbar() {
           <span>Enviar para São Paulo, SP</span>
         </div>
 
+        <Link
+          to="/sobre-nos"
+          className="hidden h-10 shrink-0 items-center rounded-full px-2 text-sm font-medium text-muted-foreground transition-colors hover:text-primary lg:inline-flex"
+        >
+          Sobre
+        </Link>
+
         {user ? (
           <div className="flex shrink-0 items-center gap-1.5">
             <span className="hidden items-center gap-1.5 rounded-full bg-brand-soft/70 px-3 py-1.5 text-xs font-semibold text-brand-soft-foreground sm:inline-flex">

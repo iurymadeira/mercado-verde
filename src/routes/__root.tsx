@@ -9,6 +9,7 @@ import {
   type ErrorComponentProps,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { Leaf } from "lucide-react";
 import { Toaster } from "sonner";
 
 import appCss from "../styles.css?url";
@@ -143,9 +144,28 @@ function RootComponent() {
               <Outlet />
             </main>
             <footer className="mt-16 border-t border-border bg-card">
-              <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 py-6 text-xs text-muted-foreground sm:flex-row sm:px-6">
-                <p className="font-medium text-foreground">Verde Market</p>
-                <p>E-commerce fictício para projeto acadêmico — interface frontend simulada.</p>
+              <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 py-6 text-xs text-muted-foreground sm:flex-row sm:px-6">
+                <div className="flex items-center gap-2">
+                  <Leaf className="size-4 text-primary" />
+                  <p className="font-medium text-foreground">Verde Market</p>
+                </div>
+                <nav className="flex items-center gap-4" aria-label="Links institucionais">
+                  <Link
+                    to="/sobre-nos"
+                    className="font-medium text-muted-foreground transition-colors hover:text-primary"
+                  >
+                    Sobre nós
+                  </Link>
+                  <Link
+                    to="/"
+                    className="font-medium text-muted-foreground transition-colors hover:text-primary"
+                  >
+                    Vitrine
+                  </Link>
+                </nav>
+                <p className="text-center sm:text-right">
+                  E-commerce fictício para projeto acadêmico — interface frontend simulada.
+                </p>
               </div>
             </footer>
             <CartDrawer />
