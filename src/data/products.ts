@@ -48,7 +48,7 @@ export const PRODUCTS: Product[] = [
     title: "Fone Over-Ear Aura ANC Wireless Verde Sálvia",
     category: "eletronicos",
     categoryLabel: "Eletrônicos",
-    price: 689.9,
+    price: 299.99,
     originalPrice: 899.9,
     discountPercent: 23,
     installments: 12,
